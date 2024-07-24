@@ -9,9 +9,9 @@
 </head>
 <body>
 
-    <div id="campaigns-list">
-        @include('campaigns.partials.campaigns_list', ['campaigns' => $campaigns])
-    </div>
+<div id="campaigns-campaigns_list">
+    @include('campaigns.partials.campaigns_list', ['campaigns' => $campaigns])
+</div>
 
 
 <script>
@@ -20,7 +20,7 @@
 
         axios.get('{{ route('campaigns.index') }}', { params: { search: searchQuery } })
             .then(response => {
-                document.getElementById('campaigns-list').innerHTML = response.data;
+                document.getElementById('campaigns-campaigns_list').innerHTML = response.data;
             })
             .catch(error => {
                 console.error('Error searching campaigns:', error);
@@ -30,7 +30,7 @@
     function loadCampaigns() {
         axios.get('{{ route('campaigns.index') }}')
             .then(response => {
-                document.getElementById('campaigns-list').innerHTML = response.data;
+                document.getElementById('campaigns-campaigns_list').innerHTML = response.data;
             })
             .catch(error => {
                 console.error('Error loading campaigns:', error);

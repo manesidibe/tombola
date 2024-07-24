@@ -3,28 +3,29 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CampaignController;
 
-// Route pour afficher le formulaire d'inscription
+// Routes d'authentification
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-
-// Route pour gérer l'envoi du formulaire d'inscription
 Route::post('/register', [RegisterController::class, 'register']);
-
-// Route pour afficher le formulaire de connexion
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-
-// Route pour gérer l'envoi du formulaire de connexion
 Route::post('/login', [LoginController::class, 'login']);
-
-// Route pour gérer la déconnexion
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Route pour le tableau de bord
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard')->middleware('auth');
+
+// Routes de campagnes et tableau de bord
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [CampaignController::class, 'index'])->name('dashboard');
+    Route::get('/campaigns/create', [CampaignController::class, 'create'])->name('campaigns.create');
+    Route::post('/campaigns/store', [CampaignController::class, 'store'])->name('campaigns.store');
+    Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
+    Route::get('/campaigns/{id}/edit', [CampaignController::class, 'edit'])->name('campaigns.edit');
+    Route::put('/campaigns/{id}', [CampaignController::class, 'update'])->name('campaigns.update');
+    Route::post('/campaigns/{id}/archive', [CampaignController::class, 'archive'])->name('campaigns.archive');
+    Route::get('/campaigns/archived', [CampaignController::class, 'archivedCampaigns'])->name('campaigns.archived');
+    Route::put('/campaigns/{campaign}/restore', [CampaignController::class, 'restore'])->name('campaigns.restore');
+
+});
 
 // Route par défaut (redirection vers la page de login)
 Route::redirect('/', '/login');
-
-?>
